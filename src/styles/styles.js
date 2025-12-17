@@ -380,12 +380,13 @@ export const styles = `
   .preview-header h1 {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: -3px;
   }
 
   .preview-header p {
     font-size: 14px;
     color: #666;
+    font-weight: bold;
   }
 
   .preview-content {

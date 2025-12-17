@@ -9,7 +9,7 @@ const Header = () => {
       <div className="header-content">
         <img src={logo} alt="Logo" className="header-logo" />
         <div className="header-title">
-          <h1>Generator SURAT PERINTAH KERJA</h1>
+          <h1>GENERATOR SURAT PERINTAH KERJA</h1>
           <p>Surat Perintah Kerja</p>
         </div>
       </div>
