@@ -294,6 +294,29 @@ export const styles = `
     background: #FFC107;
     color: white;
   }
+  
+  .penerima-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .penerima-item {
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #e0e0e0;
+  }
+  .penerima-item:last-child {
+    border-bottom: none;
+  }
+  .penerima-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .penerima-title {
+    font-weight: 700;
+    color: #333;
+  }
 
   /* Action Buttons */
   .action-buttons {
@@ -380,12 +403,12 @@ export const styles = `
   .preview-header h1 {
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: -3px;
+    margin-bottom: -8px;
   }
 
   .preview-header p {
     font-size: 14px;
-    color: #666;
+    color: #2c2c2cff;
     font-weight: bold;
   }
 
@@ -399,6 +422,14 @@ export const styles = `
 
   .preview-section p {
     margin-bottom: 8px;
+  }
+  .preview-recipient {
+    margin-bottom: 10px;
+    page-break-inside: avoid;
+  }
+  .preview-recipient-title {
+    font-weight: bold;
+    margin-bottom: 6px;
   }
 
   .preview-table {
@@ -444,9 +475,34 @@ export const styles = `
   .preview-signature {
     margin-top: 40px;
   }
+  .preview-signature-area {
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    min-height: 120px;
+    margin-top: -30px;
+  }
+  .preview-ttd-image {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 220px;
+    height: auto;
+    object-fit: contain;
+  }
+  .preview-stamp-image {
+    position: absolute;
+    top: 15px;
+    left: 100px;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    opacity: 0.85;
+  }
 
   .preview-signature-line {
-    margin-top: 80px;
+    margin-top: 90px;
     padding-top: 8px;
     border-top: 2px solid #333;
     max-width: 200px;
@@ -458,6 +514,38 @@ export const styles = `
 
   .preview-signature-title {
     font-size: 13px;
+  }
+  
+  .signature-pad {
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .signature-canvas {
+    width: 100%;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #eee;
+    touch-action: none;
+  }
+  .signature-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .signature-preview {
+    margin-top: 10px;
+    max-width: 300px;
+    height: auto;
+    border: 1px solid #eee;
+    border-radius: 6px;
+  }
+  .stempel-preview {
+    margin-top: 10px;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    background: transparent;
   }
 
   /* Footer */
@@ -550,13 +638,13 @@ export const styles = `
 
     .preview-container {
       box-shadow: none;
-      padding: 2cm;
+      padding: 0;
       max-width: 100%;
     }
 
     @page {
       size: A4;
-      margin: 0;
+      margin: 2cm;
     }
   }
 `;

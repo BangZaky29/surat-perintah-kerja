@@ -3,6 +3,11 @@ import React from 'react';
 import { formatTanggal } from '../utils/helpers';
 
 const Preview = ({ formData }) => {
+  const penerimaList = Array.isArray(formData.penerima)
+    ? formData.penerima
+    : formData.penerima
+      ? [formData.penerima]
+      : [];
   return (
     <div className="preview-column">
       <div className="preview-container">
@@ -39,25 +44,53 @@ const Preview = ({ formData }) => {
           {/* Penerima */}
           <div className="preview-section">
             <p>Memberikan perintah kerja kepada:</p>
-            <table className="preview-table">
-              <tbody>
-                <tr>
-                  <td>Nama</td>
-                  <td>:</td>
-                  <td>{formData.penerima.nama || '___________'}</td>
-                </tr>
-                <tr>
-                  <td>Jabatan</td>
-                  <td>:</td>
-                  <td>{formData.penerima.jabatan || '___________'}</td>
-                </tr>
-                <tr>
-                  <td>Alamat</td>
-                  <td>:</td>
-                  <td>{formData.penerima.alamat || '___________'}</td>
-                </tr>
-              </tbody>
-            </table>
+            {penerimaList.map((penerima, index) => (
+              <div key={index} className="preview-recipient">
+                {penerimaList.length > 1 && (
+                  <p className="preview-recipient-title">Penerima {index + 1}</p>
+                )}
+                <table className="preview-table">
+                  <tbody>
+                    <tr>
+                      <td>Nama</td>
+                      <td>:</td>
+                      <td>{penerima?.nama || '___________'}</td>
+                    </tr>
+                    <tr>
+                      <td>Jabatan</td>
+                      <td>:</td>
+                      <td>{penerima?.jabatan || '___________'}</td>
+                    </tr>
+                    <tr>
+                      <td>Alamat</td>
+                      <td>:</td>
+                      <td>{penerima?.alamat || '___________'}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+            {penerimaList.length === 0 && (
+              <table className="preview-table">
+                <tbody>
+                  <tr>
+                    <td>Nama</td>
+                    <td>:</td>
+                    <td>___________</td>
+                  </tr>
+                  <tr>
+                    <td>Jabatan</td>
+                    <td>:</td>
+                    <td>___________</td>
+                  </tr>
+                  <tr>
+                    <td>Alamat</td>
+                    <td>:</td>
+                    <td>___________</td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
           </div>
 
           {/* Spesifikasi Pekerjaan */}
@@ -100,6 +133,14 @@ const Preview = ({ formData }) => {
           {/* Tanda Tangan */}
           <div className="preview-signature">
             <p style={{ fontWeight: 'bold' }}>{formData.info.namaPT || '___________'}</p>
+            <div className="preview-signature-area">
+              {formData.info.ttd && (
+                <img src={formData.info.ttd} alt="TTD" className="preview-ttd-image" />
+              )}
+              {formData.info.stempel && (
+                <img src={formData.info.stempel} alt="Stempel" className="preview-stamp-image" />
+              )}
+            </div>
             <div className="preview-signature-line">
               <p className="preview-signature-name">{formData.penandatangan.nama || '___________'}</p>
               <p className="preview-signature-title">{formData.penandatangan.jabatan || '___________'}</p>

@@ -4,7 +4,7 @@
  * Format tanggal dari format YYYY-MM-DD ke format Indonesia
  * @param {string} dateString - Tanggal dalam format YYYY-MM-DD
  * @returns {string} Tanggal dalam format "DD Nama_Bulan YYYY"
- */
+//  */
 export const formatTanggal = (dateString) => {
   if (!dateString) return '';
   
@@ -29,8 +29,19 @@ export const validateFormData = (formData) => {
     errors.push('Nama penandatangan');
   }
   
-  if (!formData.penerima.nama) {
-    errors.push('Nama penerima');
+  const penerimaList = Array.isArray(formData.penerima)
+    ? formData.penerima
+    : formData.penerima
+      ? [formData.penerima]
+      : [];
+  if (penerimaList.length === 0) {
+    errors.push('Data penerima');
+  } else {
+    penerimaList.forEach((penerima, index) => {
+      if (!penerima?.nama) {
+        errors.push(`Nama penerima ke-${index + 1}`);
+      }
+    });
   }
   
   if (!formData.info.nomorSurat) {
@@ -53,9 +64,9 @@ export const validateFormData = (formData) => {
  */
 export const getInitialFormData = () => ({
   penandatangan: { nama: '', jabatan: '', alamat: '' },
-  penerima: { nama: '', jabatan: '', alamat: '' },
+  penerima: [{ nama: '', jabatan: '', alamat: '' }],
   pekerjaan: [''],
-  info: { namaPT: '', nomorSurat: '', tempat: '', tanggal: '' }
+  info: { namaPT: '', nomorSurat: '', tempat: '', tanggal: '', ttd: '', stempel: '' }
 });
 
 /**

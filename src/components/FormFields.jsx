@@ -1,5 +1,5 @@
 // src/components/FormFields.jsx
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   UserIcon, 
   BriefcaseIcon, 
@@ -64,33 +64,54 @@ export const PenandatanganForm = ({ data, onChange }) => {
 };
 
 // Form untuk data penerima
-export const PenerimaForm = ({ data, onChange }) => {
+export const PenerimaForm = ({ items, onChange, onAdd, onDelete }) => {
   return (
     <>
-      <FormInput
-        label="Nama Lengkap"
-        icon={UserIcon}
-        value={data.nama}
-        onChange={(e) => onChange('nama', e.target.value)}
-        placeholder="Contoh: Ruslan Wijaya"
-        required
-      />
-      <FormInput
-        label="Jabatan"
-        icon={BriefcaseIcon}
-        value={data.jabatan}
-        onChange={(e) => onChange('jabatan', e.target.value)}
-        placeholder="Contoh: Engineer L/A"
-        required
-      />
-      <FormInput
-        label="Alamat"
-        icon={MapPinIcon}
-        value={data.alamat}
-        onChange={(e) => onChange('alamat', e.target.value)}
-        placeholder="Contoh: Jl. Tirta Sari No.9 Sarijadi, Bandung"
-        required
-      />
+      <div className="penerima-list">
+        {items.map((data, index) => (
+          <div key={index} className="penerima-item">
+            <div className="penerima-item-header">
+              <span className="penerima-title">Penerima {index + 1}</span>
+              <button
+                className="btn-delete"
+                onClick={() => onDelete(index)}
+                disabled={items.length === 1}
+                type="button"
+              >
+                <TrashIcon />
+              </button>
+            </div>
+            <FormInput
+              label="Nama Lengkap"
+              icon={UserIcon}
+              value={data.nama} 
+              onChange={(e) => onChange(index, 'nama', e.target.value)}
+              placeholder="Contoh: Ruslan Wijaya"
+              required
+            />
+            <FormInput
+              label="Jabatan"
+              icon={BriefcaseIcon}
+              value={data.jabatan}
+              onChange={(e) => onChange(index, 'jabatan', e.target.value)}
+              placeholder="Contoh: Engineer L/A"
+              required
+            />
+            <FormInput
+              label="Alamat"
+              icon={MapPinIcon}
+              value={data.alamat}
+              onChange={(e) => onChange(index, 'alamat', e.target.value)}
+              placeholder="Contoh: Jl. Tirta Sari No.9 Sarijadi, Bandung"
+              required
+            />
+          </div>
+        ))}
+      </div>
+      <button className="btn-add" onClick={onAdd} type="button">
+        <PlusIcon />
+        Tambah Penerima
+      </button>
     </>
   );
 };
@@ -129,6 +150,86 @@ export const PekerjaanForm = ({ items, onChange, onAdd, onDelete }) => {
 };
 
 // Form untuk informasi surat
+const SignaturePad = ({ value, onChange }) => {
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [ctx, setCtx] = useState(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext('2d');
+    context.strokeStyle = '#000';
+    context.lineWidth = 2;
+    context.lineCap = 'round';
+    setCtx(context);
+  }, []);
+
+  const start = (e) => {
+    setIsDrawing(true);
+    const { offsetX, offsetY } = getPoint(e);
+    ctx && ctx.beginPath();
+    ctx && ctx.moveTo(offsetX, offsetY);
+  };
+
+  const draw = (e) => {
+    if (!isDrawing || !ctx) return;
+    const { offsetX, offsetY } = getPoint(e);
+    ctx.lineTo(offsetX, offsetY);
+    ctx.stroke();
+  };
+
+  const end = () => {
+    setIsDrawing(false);
+  };
+
+  const getPoint = (e) => {
+    if ('touches' in e) {
+      const rect = e.target.getBoundingClientRect();
+      const t = e.touches[0];
+      return { offsetX: t.clientX - rect.left, offsetY: t.clientY - rect.top };
+    }
+    return { offsetX: e.nativeEvent.offsetX, offsetY: e.nativeEvent.offsetY };
+  };
+
+  const handleClear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    onChange('');
+  };
+
+  const handleSave = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const dataUrl = canvas.toDataURL('image/png');
+    onChange(dataUrl);
+  };
+
+  return (
+    <div className="signature-pad">
+      <canvas
+        ref={canvasRef}
+        width={500}
+        height={150}
+        className="signature-canvas"
+        onMouseDown={start}
+        onMouseMove={draw}
+        onMouseUp={end}
+        onMouseLeave={end}
+        onTouchStart={start}
+        onTouchMove={draw}
+        onTouchEnd={end}
+      />
+      <div className="signature-actions">
+        <button type="button" className="btn-reset" onClick={handleClear}>Bersihkan</button>
+        <button type="button" className="btn-download" onClick={handleSave}>Simpan TTD</button>
+      </div>
+      {value && <img src={value} alt="TTD" className="signature-preview" />}
+    </div>
+  );
+};
+
 export const InfoSuratForm = ({ data, onChange }) => {
   return (
     <>
@@ -139,6 +240,32 @@ export const InfoSuratForm = ({ data, onChange }) => {
         onChange={(e) => onChange('namaPT', e.target.value)}
         placeholder="Contoh: PT. Dirgantara Engineering Services"
       />
+      <div className="form-group">
+        <label className="form-label">TTD Online</label>
+        <SignaturePad
+          value={data.ttd}
+          onChange={(val) => onChange('ttd', val)}
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Upload Stempel (PNG)</label>
+        <div className="input-wrapper">
+          <FileTextIcon />
+          <input
+            type="file"
+            className="form-input"
+            accept="image/png"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = () => onChange('stempel', reader.result);
+              reader.readAsDataURL(file);
+            }}
+          />
+        </div>
+        {data.stempel && <img src={data.stempel} alt="Stempel" className="stempel-preview" />}
+      </div>
       <FormInput
         label="Nomor Surat"
         icon={FileTextIcon}

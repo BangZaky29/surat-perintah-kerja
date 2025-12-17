@@ -37,7 +37,19 @@ const App = () => {
   useEffect(() => {
     const savedData = loadFromLocalStorage();
     if (savedData) {
-      setFormData(savedData);
+      const initial = getInitialFormData();
+      const merged = {
+        ...initial,
+        ...savedData,
+        penandatangan: { ...initial.penandatangan, ...savedData.penandatangan },
+        info: { ...initial.info, ...savedData.info }
+      };
+      if (Array.isArray(savedData.penerima)) {
+        merged.penerima = savedData.penerima.length ? savedData.penerima : initial.penerima;
+      } else if (savedData.penerima && typeof savedData.penerima === 'object') {
+        merged.penerima = [savedData.penerima];
+      }
+      setFormData(merged);
     }
   }, []);
 
@@ -59,12 +71,27 @@ const App = () => {
     });
   };
 
-  // Handle penerima change
-  const handlePenerimaChange = (field, value) => {
+  // Handle penerima change (array)
+  const handlePenerimaChange = (index, field, value) => {
+    const updated = [...formData.penerima];
+    updated[index] = { ...updated[index], [field]: value };
+    setFormData({ ...formData, penerima: updated });
+  };
+
+  const handlePenerimaAdd = () => {
     setFormData({
       ...formData,
-      penerima: { ...formData.penerima, [field]: value }
+      penerima: [...formData.penerima, { nama: '', jabatan: '', alamat: '' }]
     });
+  };
+
+  const handlePenerimaDelete = (index) => {
+    if (formData.penerima.length > 1) {
+      setFormData({
+        ...formData,
+        penerima: formData.penerima.filter((_, i) => i !== index)
+      });
+    }
   };
 
   // Handle pekerjaan change
@@ -153,8 +180,10 @@ const App = () => {
                 onToggle={handleAccordionToggle}
               >
                 <PenerimaForm
-                  data={formData.penerima}
+                  items={formData.penerima}
                   onChange={handlePenerimaChange}
+                  onAdd={handlePenerimaAdd}
+                  onDelete={handlePenerimaDelete}
                 />
               </Accordion>
 
