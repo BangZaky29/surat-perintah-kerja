@@ -1,7 +1,7 @@
 // src/components/Header.jsx
 import React from 'react';
 import { FileTextIcon } from '../icons/Icons';
-import logo from '../assets/logo-1.jpeg';
+import logo from '../assets/NS_white_01.png';
 
 const Header = () => {
   return (

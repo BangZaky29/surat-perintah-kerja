@@ -8,8 +8,7 @@ export const styles = `
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #FFF8E1 0%, #FFFFFF 50%, #FFF9C4 100%);
+    font-family: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial;
     min-height: 100vh;
   }
 
@@ -17,11 +16,12 @@ export const styles = `
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: var(--gradient-secondary);
   }
 
   /* Header */
   .app-header {
-    background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
+    background: var(--gradient-primary);
     color: white;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -54,12 +54,14 @@ export const styles = `
     font-size: 24px;
     font-weight: bold;
     margin: 0;
+    color: var(--text-dark);
   }
 
   .header-title p {
     font-size: 14px;
     opacity: 0.9;
     margin: 2px 0 0 0;
+    color: var(--gray-600);
   }
 
   /* Main Content */
@@ -106,12 +108,12 @@ export const styles = `
   }
 
   .accordion-header.active {
-    background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
+    background: var(--gradient-primary);
     color: white;
   }
 
   .accordion-header:hover:not(.active) {
-    background: #FFF8E1;
+    background: var(--blue-50);
   }
 
   .accordion-header-left {
@@ -123,7 +125,7 @@ export const styles = `
   .accordion-icon {
     width: 22px;
     height: 22px;
-    color: #FFC107;
+    color: var(--blue-600);
   }
 
   .accordion-header.active .accordion-icon {
@@ -133,7 +135,7 @@ export const styles = `
   .accordion-title {
     font-size: 18px;
     font-weight: bold;
-    color: #333;
+    color: var(--text-dark);
   }
 
   .accordion-header.active .accordion-title {
@@ -144,7 +146,7 @@ export const styles = `
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
-    color: #666;
+    color: var(--text-muted);
   }
 
   .accordion-header.active .accordion-chevron {
@@ -176,12 +178,12 @@ export const styles = `
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--gray-700);
     margin-bottom: 8px;
   }
 
   .form-label .required {
-    color: #f44336;
+    color: var(--purple-300);
     margin-left: 4px;
   }
 
@@ -194,7 +196,7 @@ export const styles = `
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: var(--text-light);
     width: 18px;
     height: 18px;
   }
@@ -202,7 +204,7 @@ export const styles = `
   .form-input {
     width: 100%;
     padding: 10px 12px 10px 40px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--gray-300);
     border-radius: 8px;
     font-size: 15px;
     transition: all 0.2s ease;
@@ -210,12 +212,12 @@ export const styles = `
 
   .form-input:focus {
     outline: none;
-    border-color: #FFC107;
-    box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
+    border-color: var(--blue-400);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
   }
 
   .form-input::placeholder {
-    color: #999;
+    color: var(--text-light);
   }
 
   /* Spesifikasi Pekerjaan */
@@ -235,13 +237,13 @@ export const styles = `
     min-width: 28px;
     padding-top: 10px;
     font-weight: 600;
-    color: #666;
+    color: var(--text-muted);
   }
 
   .pekerjaan-input {
     flex: 1;
     padding: 10px 12px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--gray-300);
     border-radius: 8px;
     font-size: 15px;
     transition: all 0.2s ease;
@@ -249,22 +251,22 @@ export const styles = `
 
   .pekerjaan-input:focus {
     outline: none;
-    border-color: #FFC107;
-    box-shadow: 0 0 0 3px rgba(255,193,7,0.1);
+    border-color: var(--blue-400);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
   }
 
   .btn-delete {
     padding: 10px;
     background: white;
-    border: 2px solid #f44336;
+    border: 2px solid var(--purple-400);
     border-radius: 8px;
-    color: #f44336;
+    color: var(--purple-400);
     cursor: pointer;
     transition: all 0.2s ease;
   }
 
   .btn-delete:hover {
-    background: #f44336;
+    background: var(--purple-400);
     color: white;
   }
 
@@ -277,10 +279,10 @@ export const styles = `
     margin-top: 12px;
     width: 100%;
     padding: 12px;
-    background: #FFF8E1;
-    border: 2px solid #FFC107;
+    background: var(--blue-50);
+    border: 2px solid var(--blue-300);
     border-radius: 8px;
-    color: #F57C00;
+    color: var(--blue-600);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -291,7 +293,7 @@ export const styles = `
   }
 
   .btn-add:hover {
-    background: #FFC107;
+    background: var(--blue-600);
     color: white;
   }
   
@@ -315,7 +317,7 @@ export const styles = `
   }
   .penerima-title {
     font-weight: 700;
-    color: #333;
+    color: var(--text-dark);
   }
 
   /* Action Buttons */
@@ -363,22 +365,22 @@ export const styles = `
   }
 
   .btn-download {
-    background: linear-gradient(135deg, #FFC107 0%, #FFB300 100%);
+    background: var(--gradient-primary);
     border: none;
     color: white;
-    box-shadow: 0 2px 4px rgba(255,193,7,0.3);
+    box-shadow: 0 2px 4px rgba(59,130,246,0.3);
   }
 
   .btn-download:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(255,193,7,0.4);
+    box-shadow: 0 4px 8px rgba(59,130,246,0.4);
   }
 
   .action-info {
     margin-top: 12px;
     text-align: center;
     font-size: 12px;
-    color: #999;
+    color: var(--text-muted);
   }
 
   /* Preview */
@@ -397,7 +399,7 @@ export const styles = `
     text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 4px solid #030303ff;
+    border-bottom: 4px solid var(--text-dark);
   }
 
   .preview-header h1 {
@@ -408,7 +410,7 @@ export const styles = `
 
   .preview-header p {
     font-size: 14px;
-    color: #2c2c2cff;
+    color: var(--text-dark);
     font-weight: bold;
   }
 
@@ -504,7 +506,7 @@ export const styles = `
   .preview-signature-line {
     margin-top: 90px;
     padding-top: 8px;
-    border-top: 2px solid #333;
+    border-top: 2px solid var(--text-dark);
     max-width: 200px;
   }
 
@@ -550,8 +552,8 @@ export const styles = `
 
   /* Footer */
   .app-footer {
-    background: #f5f5f5;
-    border-top: 1px solid #e0e0e0;
+    background: var(--gradient-primary);
+    border-top: 1px solid var(--gray-200);
     padding: 24px;
     text-align: center;
     margin-top: 40px;
@@ -560,8 +562,12 @@ export const styles = `
   .app-footer p {
     margin: 4px 0;
     font-size: 14px;
-    color: #666;
+    color: var(--text-dark);
   }
+    .app-footer p.subText{
+      font-size: 120px;
+      color: var(--gray-600);
+    }
 
   .app-footer p:first-child {
     font-weight: 600;
