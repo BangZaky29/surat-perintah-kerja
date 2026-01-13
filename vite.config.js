@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/surat-perintah-kerja/',
+  base: '/generator-surat/surat-perintah-kerja/',
 })
