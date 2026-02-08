@@ -7,12 +7,12 @@
 //  */
 export const formatTanggal = (dateString) => {
   if (!dateString) return '';
-  
+
   const months = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
     'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
   ];
-  
+
   const date = new Date(dateString);
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };
@@ -28,7 +28,7 @@ export const validateFormData = (formData) => {
   if (!formData.penandatangan.nama) {
     errors.push('Nama penandatangan');
   }
-  
+
   const penerimaList = Array.isArray(formData.penerima)
     ? formData.penerima
     : formData.penerima
@@ -43,11 +43,11 @@ export const validateFormData = (formData) => {
       }
     });
   }
-  
+
   if (!formData.info.nomorSurat) {
     errors.push('Nomor surat');
   }
-  
+
   if (!formData.pekerjaan.some(p => p.trim())) {
     errors.push('Spesifikasi pekerjaan');
   }
@@ -66,7 +66,16 @@ export const getInitialFormData = () => ({
   penandatangan: { nama: '', jabatan: '', alamat: '' },
   penerima: [{ nama: '', jabatan: '', alamat: '' }],
   pekerjaan: [''],
-  info: { namaPT: '', nomorSurat: '', tempat: '', tanggal: '', ttd: '', stempel: '' }
+  info: { namaPT: '', nomorSurat: '', tempat: '', tanggal: '', ttd: '', stempel: '' },
+  kopSurat: {
+    enabled: false,
+    logo: '',
+    namaPerusahaan: '',
+    alamat: '',
+    telepon: '',
+    email: '',
+    website: ''
+  }
 });
 
 /**

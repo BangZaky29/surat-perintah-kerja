@@ -8,9 +8,37 @@ const Preview = ({ formData }) => {
     : formData.penerima
       ? [formData.penerima]
       : [];
+
+  // Get kop surat data
+  const kopSurat = formData.kopSurat || {};
+
   return (
     <div className="preview-column">
       <div className="preview-container">
+        {/* Kop Surat - Standard Letterhead Format */}
+        {kopSurat.enabled && (
+          <div className="preview-kop-surat-container">
+            {kopSurat.logo && (
+              <img src={kopSurat.logo} alt="Logo" className="preview-kop-logo" />
+            )}
+            <div className="preview-kop-text">
+              {kopSurat.namaPerusahaan && (
+                <h2 className="preview-kop-nama">{kopSurat.namaPerusahaan}</h2>
+              )}
+              {kopSurat.alamat && (
+                <p className="preview-kop-alamat">{kopSurat.alamat}</p>
+              )}
+              <div className="preview-kop-contact">
+                {kopSurat.telepon && <span>Telp: {kopSurat.telepon}</span>}
+                {kopSurat.telepon && kopSurat.email && <span> | </span>}
+                {kopSurat.email && <span>Email: {kopSurat.email}</span>}
+                {(kopSurat.telepon || kopSurat.email) && kopSurat.website && <span> | </span>}
+                {kopSurat.website && <span>Web: {kopSurat.website}</span>}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="preview-header">
           <h1>SURAT PERINTAH KERJA</h1>
           <p>Nomor: {formData.info.nomorSurat || '___________'}</p>
@@ -108,7 +136,7 @@ const Preview = ({ formData }) => {
 
           {/* Penutup */}
           <p className="preview-closure">
-            Demikian surat perintah kerja ini dibuat agar dapat dilaksanakan dengan 
+            Demikian surat perintah kerja ini dibuat agar dapat dilaksanakan dengan
             sebaik-baiknya. Atas kerjasamanya kami ucapkan terima kasih.
           </p>
 

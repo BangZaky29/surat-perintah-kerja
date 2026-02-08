@@ -1,21 +1,41 @@
 // src/components/ActionButtons.jsx
 import React from 'react';
-import { RotateIcon, DownloadIcon } from '../icons/Icons';
+import { RotateIcon, DownloadIcon, LoadingIcon } from '../icons/Icons';
 
-const ActionButtons = ({ onReset, onDownload }) => {
+/**
+ * Clean, minimal action buttons for Reset and Download
+ * Positioned above preview on desktop
+ */
+const ActionButtons = ({ onReset, onDownload, isLoading = false }) => {
   return (
-    <div className="action-buttons">
-      <div className="button-group">
-        <button className="btn btn-reset" onClick={onReset}>
-          <RotateIcon />
-          Reset Data
-        </button>
-        <button className="btn btn-download" onClick={onDownload}>
-          <DownloadIcon />
-          Download PDF
-        </button>
-      </div>
-      <p className="action-info">Data otomatis tersimpan di browser Anda</p>
+    <div className="action-buttons-bar">
+      <button
+        className="action-btn action-btn-reset"
+        onClick={onReset}
+        disabled={isLoading}
+        title="Reset semua data"
+      >
+        <RotateIcon />
+        <span>Reset</span>
+      </button>
+      <button
+        className="action-btn action-btn-download"
+        onClick={onDownload}
+        disabled={isLoading}
+        title="Download sebagai PDF"
+      >
+        {isLoading ? (
+          <>
+            <LoadingIcon />
+            <span>Loading...</span>
+          </>
+        ) : (
+          <>
+            <DownloadIcon />
+            <span>Download PDF</span>
+          </>
+        )}
+      </button>
     </div>
   );
 };
