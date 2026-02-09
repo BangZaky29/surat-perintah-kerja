@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useState } from 'react';
 import { pdf } from '@react-pdf/renderer';
+import SubscriptionGuard from './SubscriptionGuard';
 
 // Context
 import { FormProvider, useFormContext } from './context/FormContext';
@@ -305,9 +306,11 @@ const AppContent = () => {
  */
 const App = () => {
   return (
-    <FormProvider>
-      <AppContent />
-    </FormProvider>
+    <SubscriptionGuard featureSlug="surat-perintah-kerja">
+      <FormProvider>
+        <AppContent />
+      </FormProvider>
+    </SubscriptionGuard>
   );
 };
 
