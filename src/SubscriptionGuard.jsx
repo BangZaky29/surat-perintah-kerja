@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 const CONFIG = {
     // 🔧 LOCAL: 'http://localhost:5000/api/access/check'
     // 🌐 PRODUCTION:
-    API_URL: 'https://payment.nuansasolution.id/api/access/check',
+    API_URL: 'https://api.nuansasolution.id/api/access/check',
     PAYMENT_URL: 'https://payment.nuansasolution.id/',
     SESSION_EXPIRY_MS: 60 * 60 * 1000, // 1 hour
     STORAGE_KEY_PREFIX: 'ns_access_',
@@ -26,24 +26,60 @@ const SubscriptionGuard = ({ children, featureSlug = CONFIG.DEFAULT_FEATURE_SLUG
 
     // Check existing session on mount
     useEffect(() => {
-        const checkSession = () => {
+        const checkSession = async () => {
             try {
                 const data = localStorage.getItem(storageKey);
-                if (!data) {
-                    setIsVerified(false);
-                    return;
-                }
 
-                const session = JSON.parse(data);
-
-                // Check if session is expired
-                if (session.expiresAt && Date.now() > session.expiresAt) {
+                // 1. Check specific feature session
+                if (data) {
+                    const session = JSON.parse(data);
+                    if (session.expiresAt && Date.now() < session.expiresAt) {
+                        setIsVerified(true);
+                        return; // Valid session found
+                    }
+                    // Expired - remove it
                     localStorage.removeItem(storageKey);
-                    setIsVerified(false);
-                    return;
                 }
 
-                setIsVerified(true);
+                // 2. No valid session, check global phone for auto-login
+                const storedPhone = localStorage.getItem('ns_user_phone');
+                if (storedPhone) {
+                    setIsLoading(true);
+                    // Attempt auto-verify
+                    try {
+                        const response = await fetch(CONFIG.API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                phone: storedPhone,
+                                feature_slug: featureSlug
+                            })
+                        });
+                        const result = await response.json();
+
+                        if (result.status === true) {
+                            // Success! Save session
+                            const session = {
+                                phone: storedPhone,
+                                feature: featureSlug,
+                                expiredAt: result.expired_at,
+                                createdAt: Date.now(),
+                                expiresAt: Date.now() + CONFIG.SESSION_EXPIRY_MS
+                            };
+                            localStorage.setItem(storageKey, JSON.stringify(session));
+                            setIsVerified(true);
+                            setIsLoading(false);
+                            return;
+                        }
+                    } catch (err) {
+                        console.error('Auto-verify failed', err);
+                    }
+                    setIsLoading(false);
+                }
+
+                // 3. No session, no auto-login success -> Show form
+                setIsVerified(false);
+
             } catch (err) {
                 localStorage.removeItem(storageKey);
                 setIsVerified(false);
@@ -51,7 +87,7 @@ const SubscriptionGuard = ({ children, featureSlug = CONFIG.DEFAULT_FEATURE_SLUG
         };
 
         checkSession();
-    }, [storageKey]);
+    }, [storageKey, featureSlug]);
 
     // Normalize phone number
     const normalizePhone = (phoneNumber) => {
@@ -94,6 +130,10 @@ const SubscriptionGuard = ({ children, featureSlug = CONFIG.DEFAULT_FEATURE_SLUG
                     expiresAt: Date.now() + CONFIG.SESSION_EXPIRY_MS
                 };
                 localStorage.setItem(storageKey, JSON.stringify(session));
+
+                // SAVE GLOBAL PHONE for other tools
+                localStorage.setItem('ns_user_phone', normalizePhone(phone));
+
                 setIsVerified(true);
             } else {
                 setError(result.message || 'Subscription tidak aktif');
