@@ -4,7 +4,6 @@
 // =========================================
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 
 interface SubscriptionSession {
     phone: string;
@@ -23,7 +22,7 @@ interface SubscriptionGuardProps {
 const CONFIG = {
     // 🔧 LOCAL: 'http://localhost:5000/api/access/check'
     // 🌐 PRODUCTION:
-    API_URL: 'https://payment.nuansasolution.id/api/access/check',
+    API_URL: 'https://api.nuansasolution.id/api/access/check',
     PAYMENT_URL: 'https://payment.nuansasolution.id/',
     SESSION_EXPIRY_MS: 60 * 60 * 1000, // 1 hour
     STORAGE_KEY_PREFIX: 'ns_access_',
@@ -34,7 +33,6 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
     children,
     featureSlug = CONFIG.DEFAULT_FEATURE_SLUG
 }) => {
-    const { user } = useAuth();
     const [isVerified, setIsVerified] = useState<boolean | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [phone, setPhone] = useState('');
@@ -187,12 +185,6 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                             Daftar Berlangganan
                         </a>
                     </div>
-
-                    {user && (
-                        <p className="text-center text-sm text-gray-500 mt-4">
-                            Login sebagai: {user.email}
-                        </p>
-                    )}
                 </div>
             </div>
         );
